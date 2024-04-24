@@ -1,0 +1,74 @@
+<exchangeRates>
+	<currency name="Bist100">
+		<Last>9722.09</Last>
+		<DisplayName>Bist100</DisplayName>
+		<Description>Borsa &#304;stanbul ilk 100</Description>
+		<Exchange>SPOT</Exchange>
+		<PrevClose>9645.02</PrevClose>
+		<DailyPercentage>
+                            % 0.80                        </DailyPercentage>
+		<Low>9667.55</Low>
+		<Max>9766.89</Max>
+		<UpdatedAt>2024-04-25 00:27:29</UpdatedAt>
+	</currency>
+	<currency name="Dolar">
+		<Last>32.5487</Last>
+		<DisplayName>Dolar</DisplayName>
+		<Description>Dolar TL</Description>
+		<Exchange>SPOT</Exchange>
+		<PrevClose>32.5673</PrevClose>
+		<DailyPercentage>
+                            % -0.06                        </DailyPercentage>
+		<Low>32.5487</Low>
+		<Max>32.5678</Max>
+		<UpdatedAt>2024-04-25 00:27:29</UpdatedAt>
+		<Buy>32.5388</Buy>
+		<Sell>32.5585</Sell>
+	</currency>
+	<currency name="Euro">
+		<Last>34.8664</Last>
+		<DisplayName>Euro</DisplayName>
+		<Description>Euro TL</Description>
+		<Exchange>SPOT</Exchange>
+		<PrevClose>34.8533</PrevClose>
+		<DailyPercentage>
+                            % 0.04                        </DailyPercentage>
+		<Low>34.8373</Low>
+		<Max>34.8705</Max>
+		<UpdatedAt>2024-04-25 00:27:29</UpdatedAt>
+		<Buy>34.8041</Buy>
+		<Sell>34.8791</Sell>
+	</currency>
+	<currency name="EurUsd">
+		<Last>1.0697</Last>
+		<DisplayName>EurUsd</DisplayName>
+		<Description>Euro Dolar</Description>
+		<Exchange>SPOT</Exchange>
+		<PrevClose>1.0699</PrevClose>
+		<DailyPercentage>
+                            % -0.02                        </DailyPercentage>
+		<Low>1.0695</Low>
+		<Max>1.0699</Max>
+		<UpdatedAt>2024-04-25 00:27:29</UpdatedAt>
+		<Buy>1.0695</Buy>
+		<Sell>1.0699</Sell>
+	</currency>
+	<currency name="Brent">
+		<Last>2391.93</Last>
+		<DisplayName>Brent</DisplayName>
+		<Description>Brent Petrol</Description>
+		<Exchange>SPOT</Exchange>
+		<DailyPercentage>
+                            % 0.21                        </DailyPercentage>
+		<UpdatedAt>2024-04-21 14:00:29</UpdatedAt>
+	</currency>
+	<currency name="OnsAlt&#305;n">
+		<Last>87.29</Last>
+		<DisplayName>OnsAlt&#305;n</DisplayName>
+		<Description>Ons Alt&#305;n TL</Description>
+		<Exchange>SPOT</Exchange>
+		<DailyPercentage>
+                            % 0.95                        </DailyPercentage>
+		<UpdatedAt>2024-04-21 14:00:29</UpdatedAt>
+	</currency>
+</exchangeRates>
