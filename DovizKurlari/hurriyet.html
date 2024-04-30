@@ -7,82 +7,90 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        margin: 20px;
+        margin: 0;
+        padding: 0;
     }
-
-    h1 {
-        text-align: center;
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
+    .currency {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
     }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+    .green {
+        background-color: #d4edda; /* Green background for increasing rates */
     }
-
-    th {
-        background-color: #f2f2f2;
+    .red {
+        background-color: #f8d7da; /* Red background for decreasing rates */
+    }
+    .dataTable {
+        border-radius: 55px;
+    }
+    .highlight-red {
+        background-color: #d00000; /* Darker red for highlighting */
+    }
+    .highlight-green {
+        background-color: #008000; /* Darker green for highlighting */
     }
 </style>
 </head>
 <body>
-    <h1>Exchange Rates</h1>
-    <div id="dataDisplay">
-        <table id="exchangeRatesTable">
-            <tr>
-                <th>Currency</th>
-                <th>Last Price</th>
-                <th>Buy</th>
-                <th>Sell</th>
-                <th>Prev. Close</th>
-                <th>Daily % Change</th>
-                <th>Low</th>
-                <th>High</th>
-                <th>Updated At</th>
-            </tr>
-        </table>
+    <div class="container">
+        <h1 style="color: white">Live Currency Exchange Rates</h1>
+        <div class="dataTable" id="dataDisplay"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            var prevUpdatedAt = ''; // Keep track of the previous UpdatedAt value
+
+            // Function to fetch and update data
             function fetchData() {
                 $.ajax({
                     url: 'exchange_rates.xml',
                     dataType: 'xml',
                     success: function(data) {
-                        var tableData = ''; // Clear the table data
-                        $(data).find('Currency').each(function() {
-                            var currencyName = $(this).attr('name');
-                            var lastPrice = $(this).find('Last').text();
-                            var buyPrice = $(this).find('Buy').text();
-                            var sellPrice = $(this).find('Sell').text();
-                            var prevClose = $(this).find('PrevClose').text();
-                            var dailyChange = $(this).find('DailyPercentage').text();
-                            var low = $(this).find('Low').text();
-                            var high = $(this).find('Max').text();
-                            var updatedAt = $(this).find('UpdatedAt').text();
+                        var tableData = '<table style="width:100%; border-collapse: collapse; margin-top: 20px; "><tr style="background-color: #f2f2f2;"><th style="padding: 8px; text-align: left;">Currency</th><th style="padding: 8px; text-align: left;">Last</th><th style="padding: 8px; text-align: left;">Close</th><th style="padding: 8px; text-align: left;">DailyPercentage</th><th style="padding: 8px; text-align: left;">Low</th><th style="padding: 8px; text-align: left;">Max</th><th style="padding: 8px; text-align: left;">UpdatedAt</th></tr>'; // Table header
 
-                            tableData += `<tr>
-                                <td>${currencyName}</td>
-                                <td>${lastPrice}</td>
-                                <td>${buyPrice}</td>
-                                <td>${sellPrice}</td>
-                                <td>${prevClose}</td>
-                                <td>${dailyChange}</td>
-                                <td>${low}</td>
-                                <td>${high}</td>
-                                <td>${updatedAt}</td>
-                            </tr>`;
+                        $(data).find('currency').each(function() {
+                            var currencyName = $(this).find('DisplayName').text();
+                            var Last = $(this).find('Last').text();
+                            var Close = $(this).find('PrevClose').text();
+                            var DailyPercentage = parseFloat($(this).find('DailyPercentage').text().replace('%', '').trim());
+                            var Low = $(this).find('Low').text();
+                            var Max = $(this).find('Max').text();
+                            var UpdatedAtElement = $(this).find('UpdatedAt');
+                            var UpdatedAt = UpdatedAtElement.length > 0 ? UpdatedAtElement.text() : '';
+
+                            if (UpdatedAt) {
+                                var rowClass = DailyPercentage < 0 ? 'red' : 'green'; // Determine row color based on DailyPercentage
+                                var highlightClass = DailyPercentage < 0 ? 'highlight-red' : 'highlight-green'; // Determine highlight color based on DailyPercentage
+
+                                // Add a new row to the table with the determined row color
+                                tableData += `<tr class="${rowClass}" style="border-bottom: 1px solid #ddd;"><td style="padding: 8px;">${currencyName}</td><td class="${highlightClass}" style="padding: 8px;">${Last}</td><td style="padding: 8px;">${Close}</td><td style="padding: 8px;">${DailyPercentage}%</td><td style="padding: 8px;">${Low}</td><td style="padding: 8px;">${Max}</td><td style="padding: 8px;">${UpdatedAt}</td></tr>`;
+                            }
                         });
 
-                        $('#exchangeRatesTable').html(tableData); // Update the table content
+                        tableData += '</table>'; // Close the table
+
+                        // Update the HTML content with the new table data
+                        $('#dataDisplay').html(tableData);
+
+                        // Check if UpdatedAt value changed
+                        var currentUpdatedAt = $('#dataDisplay tr[id="UpdatedAt"]').text();
+                        if (currentUpdatedAt !== prevUpdatedAt) {
+                            $('.highlight-red, .highlight-green').addClass('highlight'); // Add highlight class for effect
+                            setTimeout(function() {
+                                $('.highlight-red, .highlight-green').removeClass('highlight'); // Remove highlight after 1 second
+                            }, 1000);
+                            prevUpdatedAt = currentUpdatedAt; // Update the previous UpdatedAt value
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching data:', error);
@@ -90,8 +98,9 @@
                 });
             }
 
+            // Initial fetch and then update every 10 seconds
             fetchData();
-            setInterval(fetchData, 10000); // Refresh every 10 seconds
+            setInterval(fetchData, 10000);  // Refresh every 10 seconds (10000 milliseconds)
         });
     </script>
 </body>
